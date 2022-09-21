@@ -11,3 +11,6 @@ main()
     console.error(error)
     process.exit(1)
   })
+
+// Contract deployed on the Goerli test network at address:
+// 0xB4beE10182a0a2D10D6496C47e6Bcf7f38ece295
