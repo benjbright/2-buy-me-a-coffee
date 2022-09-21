@@ -53,7 +53,7 @@ async function main() {
   await printBalances(addresses)
 
   // Buy the owner a few coffees
-  const tip = { value: ethers.utils.parseEther("0.0005") }
+  const tip = { value: ethers.utils.parseEther("0.001") }
   await buyMeACoffee.connect(tipper).buyCoffee("Jazmin", "Free coffee!", tip)
   await buyMeACoffee.connect(tipper2).buyCoffee("Laura", "Enjoy!", tip)
   await buyMeACoffee.connect(tipper3).buyCoffee("Jane", "Coffee for you!", tip)
