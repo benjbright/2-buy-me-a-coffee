@@ -23,7 +23,7 @@ function App() {
     message: "",
   })
   const [memosArray, setmemosArray] = useState([])
-  // console.log(contractAddress)
+  const [isWeb3, setIsWeb3] = useState(false)
 
   // Wallet connection logic
   const { ethereum } = window
@@ -34,6 +34,8 @@ function App() {
         console.log("Please install Metamask")
       }
 
+      if (ethereum) console.log("Metamask wallet detected!")
+
       const accounts = await ethereum.request({ method: "eth_accounts" })
       console.log(`Accounts: ${accounts}`)
 
@@ -41,6 +43,7 @@ function App() {
         const account = accounts[0]
         console.log("Wallet is connected!" + account)
         setConnectedAccount(account)
+        setIsWeb3(true)
       } else {
         console.log("Please connect your wallet")
       }
@@ -59,6 +62,7 @@ function App() {
 
       setConnectedAccount(accounts[0])
       console.log(`Connected account is ${accounts[0]}`)
+      setIsWeb3(true)
       getMemos()
     } catch (error) {
       console.log(error)
@@ -101,7 +105,7 @@ function App() {
 
   // Get memos stored on the blockchain
   const getMemos = async () => {
-    if (connectedAccount) {
+    if (isWeb3) {
       const contract = getEthereumContract()
       const memos = await contract.getMemos()
 
@@ -126,16 +130,19 @@ function App() {
 
   useEffect(() => {
     isWalletConnected()
-    // connectWallet()
-    // getEthereumContract()
     getMemos()
-  }, [])
+  }, [isWeb3])
 
   return (
     <div className="min-h-screen p-4">
       <h1>Expresso</h1>
-      <p>The fast way to buy a coffee for your favourite creators</p>
-      {connectedAccount ? (
+      <p>The express way to buy a coffee for your favourite creators</p>
+      {ethereum ? (
+        <p>Metamask wallet detected!</p>
+      ) : (
+        <p>Please install Metamask</p>
+      )}
+      {isWeb3 ? (
         <p>Your account {splitString(connectedAccount)} has been connected!</p>
       ) : (
         <p>Please connect your Metamask wallet</p>
@@ -144,7 +151,7 @@ function App() {
         className="w-full mt-2 border-[1px] p-2 border-[#3d4f7c] rounded cursor-pointer"
         onClick={connectWallet}
       >
-        {connectedAccount ? "Connected!" : "Connect"}
+        {isWeb3 ? "Connected!" : "Connect"}
       </button>
       <br />
       <div className="flex flex-col">
