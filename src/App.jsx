@@ -135,7 +135,7 @@ function App() {
 
   return (
     <div className="min-h-screen p-4">
-      <h1>Expresso</h1>
+      <h1 className="text-[#4E2A2A]">Expresso</h1>
       <p>The express way to buy a coffee for your favourite creators</p>
       {ethereum ? (
         <p>Metamask wallet detected!</p>
