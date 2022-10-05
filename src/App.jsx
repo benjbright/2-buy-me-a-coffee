@@ -128,6 +128,8 @@ function App() {
     return buyCoffeeContract
   }
 
+  
+
   useEffect(() => {
     isWalletConnected()
     getMemos()
