@@ -31,6 +31,7 @@ async function printMemos(memos) {
     const tipper = memo.name
     const tipperAddress = memo.from
     const message = memo.message
+
     console.log(
       `At ${timestamp}, ${tipper} (${tipperAddress}) said: "${message}"`
     )
