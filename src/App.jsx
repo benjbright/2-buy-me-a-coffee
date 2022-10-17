@@ -128,8 +128,6 @@ function App() {
     return buyCoffeeContract
   }
 
-  
-
   useEffect(() => {
     isWalletConnected()
     getMemos()
@@ -174,7 +172,12 @@ function App() {
       <div>
         <h2>Previous messages:</h2>
         {memosArray.map((item, i) => (
-          <p key={i}>{item.message}</p>
+          <div key={i}>
+            <p>{item.message}</p>
+            <p>{item.name}</p>
+            <p>{splitString(item.from)}</p>
+            <br />
+          </div>
         ))}
       </div>
     </div>
