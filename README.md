@@ -1,13 +1,6 @@
-# Sample Hardhat Project
+# Alchemy Road to Web 3
 
-This project demonstrates a basic Hardhat use case. It comes with a sample contract, a test for that contract, and a script that deploys that contract.
+## Project 2 - Buy me a coffee dApp
 
-Try running some of the following tasks:
+## Notes and key learning points
 
-```shell
-npx hardhat help
-npx hardhat test
-REPORT_GAS=true npx hardhat test
-npx hardhat node
-npx hardhat run scripts/deploy.js
-```
