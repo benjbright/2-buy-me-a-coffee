@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react"
 import { ethers } from "ethers"
-// import "./App.css"
 import { contractAbi, contractAddress } from "./utils/constants"
 import { splitString } from "./utils/splitString"
+import Header from "./components/Header"
+import Main from "./components/Main"
+import Footer from "./components/Footer"
 
 const Input = ({ placeholder, type, name, handleChange }) => {
   return (
@@ -25,33 +27,65 @@ function App() {
   const [memosArray, setmemosArray] = useState([])
   const [isWeb3, setIsWeb3] = useState(false)
 
-  // Wallet connection logic
+  const [connected, setConnected] = useState(false)
+  const [status, setStatus] = useState("")
+
   const { ethereum } = window
 
-  const isWalletConnected = async () => {
-    try {
-      if (!ethereum) {
-        console.log("Please install Metamask")
-      }
+  // Called once on initial page render
+  useEffect(() => {
+    addWalletListener()
+    getMemos()
+  }, [])
 
-      if (ethereum) console.log("Metamask wallet detected!")
+  // Wallet connection logic
 
-      const accounts = await ethereum.request({ method: "eth_accounts" })
-      console.log(`Accounts: ${accounts}`)
+  const addWalletListener = () => {
+    // Listener function to detect changes in wallet state
 
-      if (accounts.length > 0) {
-        const account = accounts[0]
-        console.log("Wallet is connected!" + account)
-        setConnectedAccount(account)
-        setIsWeb3(true)
-      } else {
-        console.log("Please connect your wallet")
-      }
-    } catch (error) {
-      console.log(error)
-
-      throw new Error("No ethereum object found...")
+    if (!ethereum) {
+      console.log("Please install Metamask")
+      setStatus(
+        <p>
+          {" "}
+          🦊{" "}
+          <a target="_blank" href={`https://metamask.io/download`}>
+            Please install Metamask, a virtual Ethereum wallet, in your browser.
+          </a>
+        </p>
+      )
     }
+
+    if (ethereum) {
+      console.log("Metamask detected!")
+      setStatus("Please connect to Metamask")
+
+      ethereum.on("accountsChanged", (accounts) => {
+        if (accounts.length > 0) {
+          setConnectedAccount(accounts[0])
+          setStatus("Connected to Metamask, welcome to Web 3!")
+          console.log("Connected to Metamask")
+        } else {
+          setStatus("Please connect to Metamask")
+          setConnected(false)
+          console.log("Metamask not connected")
+        }
+      })
+    }
+
+    // if (ethereum) console.log("Metamask wallet detected!")
+
+    // const accounts = await ethereum.request({ method: "eth_accounts" })
+    // console.log(`Accounts: ${accounts}`)
+
+    // if (accounts.length > 0) {
+    //   const account = accounts[0]
+    //   console.log("Wallet is connected!" + account)
+    //   setConnectedAccount(account)
+    //   // setIsWeb3(true)
+    // } else {
+    //   console.log("Please connect your wallet")
+    // }
   }
 
   const connectWallet = async () => {
@@ -62,7 +96,9 @@ function App() {
 
       setConnectedAccount(accounts[0])
       console.log(`Connected account is ${accounts[0]}`)
-      setIsWeb3(true)
+      // setIsWeb3(true)
+      setStatus("Connected to Metamask!")
+      setConnected(true)
       getMemos()
     } catch (error) {
       console.log(error)
@@ -128,15 +164,13 @@ function App() {
     return buyCoffeeContract
   }
 
-  useEffect(() => {
-    isWalletConnected()
-    getMemos()
-  }, [isWeb3])
-
   return (
-    <div className="min-h-screen p-4">
-      <h1 className="text-[#4E2A2A]">Expresso</h1>
-      <p>The express way to buy a coffee for your favourite creators</p>
+    <div>
+      <Header onClick={connectWallet} connected={connected} />
+      <Main status={status} />
+
+      <Footer />
+      {/* <p>The express way to buy a coffee for your favourite creators</p>
       {ethereum ? (
         <p>Metamask wallet detected!</p>
       ) : (
@@ -179,7 +213,7 @@ function App() {
             <br />
           </div>
         ))}
-      </div>
+      </div> */}
     </div>
   )
 }
