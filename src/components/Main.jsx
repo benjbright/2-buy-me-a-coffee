@@ -1,6 +1,6 @@
 import Form from "./Form"
 
-const Main = ({ status }) => {
+const Main = ({ status, handleChange, handleSubmit, formData, message }) => {
   return (
     <main>
       <div className="image">
@@ -13,10 +13,19 @@ const Main = ({ status }) => {
         <div className="connect-section">
           <p>{status}</p>
         </div>
+        <div className="form-section">
+          <Form
+            handleChange={handleChange}
+            handleSubmit={handleSubmit}
+            formData={formData}
+          />
+        </div>
+        <div className="message">
+          <p>{message}</p>
+        </div>
       </div>
-      <div className="form">
-        <Form />
-      </div>
+
+      <div className="messages-window"></div>
     </main>
   )
 }

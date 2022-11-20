@@ -20,25 +20,79 @@ const Input = ({ placeholder, type, name, handleChange }) => {
 function App() {
   // Component state
   const [connectedAccount, setConnectedAccount] = useState("")
+  const [connected, setConnected] = useState(false)
+  const [status, setStatus] = useState("")
+
   const [formData, setFormData] = useState({
     name: "",
     message: "",
   })
-  const [memosArray, setmemosArray] = useState([])
-  const [isWeb3, setIsWeb3] = useState(false)
 
-  const [connected, setConnected] = useState(false)
-  const [status, setStatus] = useState("")
+  const [message, setMessage] = useState("Waiting for your order...")
+
+  const [memosArray, setmemosArray] = useState([])
+
+  const [isWeb3, setIsWeb3] = useState(false)
 
   const { ethereum } = window
 
   // Called once on initial page render
   useEffect(() => {
+    async function fetchWallet() {
+      const { address, status, connected } = await getCurrentWalletConnected()
+      setStatus(status)
+      setConnectedAccount(address)
+      setConnected(connected)
+      console.log(address)
+      console.log(status)
+    }
+
+    fetchWallet()
     addWalletListener()
     getMemos()
   }, [])
 
   // Wallet connection logic
+
+  // Get the current wallet connected details
+  const getCurrentWalletConnected = async () => {
+    // Check if an Ethereum account is already connected
+    // to our dApp on page load and update our UI
+    if (ethereum) {
+      try {
+        const addressArray = await ethereum.request({
+          method: "eth_accounts",
+        })
+        if (addressArray.length > 0) {
+          return {
+            address: addressArray[0],
+            status: "Connected, welcome to Web 3!",
+            connected: true,
+          }
+        } else {
+          return {
+            address: "",
+            status: "Please connect to Metamask",
+            connected: false,
+          }
+        }
+      } catch (error) {
+        return {
+          address: "",
+          status: error.message,
+          connected: false,
+        }
+      }
+    } else {
+      return {
+        address: "",
+        status: `Please install
+        <a href="https://metamask.io/download"> Metamask</a>, a virtual
+        ethereum wallet, in your browser.`,
+        connected: false,
+      }
+    }
+  }
 
   const addWalletListener = () => {
     // Listener function to detect changes in wallet state
@@ -64,6 +118,7 @@ function App() {
         if (accounts.length > 0) {
           setConnectedAccount(accounts[0])
           setStatus("Connected to Metamask, welcome to Web 3!")
+          setConnected(true)
           console.log("Connected to Metamask")
         } else {
           setStatus("Please connect to Metamask")
@@ -97,7 +152,7 @@ function App() {
       setConnectedAccount(accounts[0])
       console.log(`Connected account is ${accounts[0]}`)
       // setIsWeb3(true)
-      setStatus("Connected to Metamask!")
+      setStatus("Connected to Metamask, welcome to Web 3!")
       setConnected(true)
       getMemos()
     } catch (error) {
@@ -107,12 +162,12 @@ function App() {
 
   // Handle form changes
   const handleChange = (e, name) => {
+    // console.log(e.target.value)
+    // console.log(name)
     setFormData((prevState) => ({
       ...prevState,
       [name]: e.target.value,
     }))
-
-    // console.log(e.target.value)
   }
 
   // Buy coffee
@@ -123,20 +178,29 @@ function App() {
     const contract = getEthereumContract()
     console.log(contract)
 
-    console.log("Buying coffee...")
+    console.log("Waiting for approval...")
+    setMessage("Waiting for approval...")
     const coffeeTx = await contract.buyCoffee(formData.name, formData.message, {
       value: ethers.utils.parseEther("0.0001"),
     })
+
+    console.log("Waiting for block confirmation...")
+    setMessage("Waiting for block confirmation...")
 
     await coffeeTx.wait(2)
 
     console.log(`Your transaction has been mined: ${coffeeTx.hash}`)
     console.log("Transaction completed!")
+    setMessage(`Your transaction has been mined: ${coffeeTx.hash}`)
 
     setFormData({
       name: "",
       message: "",
     })
+
+    setTimeout(() => {
+      setMessage("Waiting for your order...")
+    }, 10000)
   }
 
   // Get memos stored on the blockchain
@@ -167,7 +231,13 @@ function App() {
   return (
     <div>
       <Header onClick={connectWallet} connected={connected} />
-      <Main status={status} />
+      <Main
+        status={status}
+        handleChange={handleChange}
+        handleSubmit={buyCoffee}
+        formData={formData}
+        message={message}
+      />
 
       <Footer />
       {/* <p>The express way to buy a coffee for your favourite creators</p>
