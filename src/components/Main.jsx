@@ -1,6 +1,14 @@
 import Form from "./Form"
+import Messages from "./Messages"
 
-const Main = ({ status, handleChange, handleSubmit, formData, message }) => {
+const Main = ({
+  status,
+  handleChange,
+  handleSubmit,
+  formData,
+  message,
+  memos,
+}) => {
   return (
     <main>
       <div className="image">
@@ -25,7 +33,9 @@ const Main = ({ status, handleChange, handleSubmit, formData, message }) => {
         </div>
       </div>
 
-      <div className="messages-window"></div>
+      <div className="messages-window">
+        <Messages memos={memos} />
+      </div>
     </main>
   )
 }

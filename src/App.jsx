@@ -6,16 +6,16 @@ import Header from "./components/Header"
 import Main from "./components/Main"
 import Footer from "./components/Footer"
 
-const Input = ({ placeholder, type, name, handleChange }) => {
-  return (
-    <input
-      placeholder={placeholder}
-      type={type}
-      onChange={(e) => handleChange(e, name)}
-      className="border-4 my-2"
-    />
-  )
-}
+// const Input = ({ placeholder, type, name, handleChange }) => {
+//   return (
+//     <input
+//       placeholder={placeholder}
+//       type={type}
+//       onChange={(e) => handleChange(e, name)}
+//       className="border-4 my-2"
+//     />
+//   )
+// }
 
 function App() {
   // Component state
@@ -32,7 +32,7 @@ function App() {
 
   const [memosArray, setmemosArray] = useState([])
 
-  const [isWeb3, setIsWeb3] = useState(false)
+  // const [isWeb3, setIsWeb3] = useState(false)
 
   const { ethereum } = window
 
@@ -47,10 +47,15 @@ function App() {
       console.log(status)
     }
 
+    async function getMessages() {
+      await getMemos()
+    }
+
     fetchWallet()
     addWalletListener()
-    getMemos()
-  }, [])
+    // getMemos()
+    getMessages()
+  }, [connected])
 
   // Wallet connection logic
 
@@ -161,12 +166,12 @@ function App() {
   }
 
   // Handle form changes
-  const handleChange = (e, name) => {
+  const handleChange = (event) => {
     // console.log(e.target.value)
-    // console.log(name)
+    console.log(event.target.value)
     setFormData((prevState) => ({
       ...prevState,
-      [name]: e.target.value,
+      [event.target.id]: event.target.value,
     }))
   }
 
@@ -205,12 +210,14 @@ function App() {
 
   // Get memos stored on the blockchain
   const getMemos = async () => {
-    if (isWeb3) {
+    if (connected) {
       const contract = getEthereumContract()
       const memos = await contract.getMemos()
 
       console.log(memos)
       setmemosArray(memos)
+    } else {
+      console.log("Connect to Metamask to access messages")
     }
   }
 
@@ -237,6 +244,7 @@ function App() {
         handleSubmit={buyCoffee}
         formData={formData}
         message={message}
+        memos={memosArray}
       />
 
       <Footer />
