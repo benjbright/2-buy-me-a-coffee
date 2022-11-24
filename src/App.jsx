@@ -196,12 +196,14 @@ function App() {
 
     console.log(`Your transaction has been mined: ${coffeeTx.hash}`)
     console.log("Transaction completed!")
-    setMessage(`Your transaction has been mined: ${coffeeTx.hash}`)
+    setMessage(`Your transaction has been mined: ${splitString(coffeeTx.hash)}`)
 
     setFormData({
       name: "",
       message: "",
     })
+
+    getMemos()
 
     setTimeout(() => {
       setMessage("Waiting for your order...")
@@ -236,7 +238,7 @@ function App() {
   }
 
   return (
-    <div>
+    <div className="container">
       <Header onClick={connectWallet} connected={connected} />
       <Main
         status={status}

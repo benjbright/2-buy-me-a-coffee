@@ -21,7 +21,7 @@ const Form = ({ handleChange, handleSubmit, formData }) => {
       <div>
         <label htmlFor="name">Name</label>
         <input
-          placeholder="Name"
+          // placeholder="Name"
           id="name"
           type="text"
           // name="name"
@@ -32,7 +32,7 @@ const Form = ({ handleChange, handleSubmit, formData }) => {
       <div>
         <label htmlFor="message">Message</label>
         <input
-          placeholder="Message"
+          // placeholder="Message"
           id="message"
           type="text"
           // name="message"

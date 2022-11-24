@@ -10,6 +10,7 @@ html,
 body {
   margin: 0;
   padding: 0.5em 2em;
+  background-color: #faf9f6;
 }
 
 /* HEADER COMPONENT */
@@ -71,13 +72,20 @@ main {
   padding-left: 1em;
 }
 
+.messages-header {
+  font-weight: 700;
+}
+
 .messages p {
   font-size: 0.7rem;
 }
 
 .message-item {
-  border: 1px solid green;
+  /* border: 1px solid green; */
   margin-bottom: 0.25em;
+  background: #fff;
+  padding: 0.1em 0.25em;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 }
 
 /* .form img {
@@ -89,7 +97,7 @@ main {
 
 .main-text {
   border: 1px solid red;
-  margin-top: 2em;
+  /* margin-top: 1em; */
 }
 
 /* .main-text h1 {
@@ -143,7 +151,9 @@ main {
 
 .form label {
   font-size: 0.7rem;
-  border: 1px solid orange;
+  /* border: 1px solid orange; */
+  /* margin-left: 1em; */
+  color: hsl(0, 0%, 41%);
 }
 
 .form input {
@@ -153,6 +163,7 @@ main {
   font-size: 0.7rem;
   padding: 0.6rem 1rem;
   border-radius: 0.4rem;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 }
 
 .form button {
@@ -197,4 +208,34 @@ footer p {
 footer a {
   color: hsl(228, 45%, 44%);
   font-size: 0.5rem;
+}
+
+/* MEDIA QUERIES */
+@media (max-width: 1050px) {
+  body {
+    padding: 0.5em 0.5em;
+  }
+}
+
+@media (max-width: 480px) {
+  body {
+    padding: 0.5em 0.1em;
+  }
+
+  .container {
+    /* width: 90vw; */
+  }
+
+  main {
+    grid-template-columns: repeat(1, 1fr);
+    /* width: 100%; */
+  }
+
+  .menu-items {
+    display: none;
+  }
+
+  .messages-window {
+    padding-left: 0;
+  }
 }

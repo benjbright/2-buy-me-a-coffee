@@ -13,7 +13,6 @@ const Main = ({
     <main>
       <div className="image">
         <div className="main-text">
-          {/* <h1>Buy me a coffee</h1> */}
           <p>
             The decentralized <span>Buy me a Coffee</span> app
           </p>
